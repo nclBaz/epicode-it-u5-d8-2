@@ -1,9 +1,12 @@
 package riccardogulin.u5d8.users;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import riccardogulin.u5d8.exceptions.BadRequestException;
@@ -27,8 +30,10 @@ public class UsersService {
 		return usersRepo.save(newUser);
 	}
 
-	public List<User> find() {
-		return usersRepo.findAll();
+	public Page<User> find(int page, int size, String sort) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sort)); // (numero di pagina, numero di elementi per
+																		// pagina, nome del campo per cui sortare)
+		return usersRepo.findAll(pageable);
 	}
 
 	public User findById(UUID id) throws NotFoundException {
