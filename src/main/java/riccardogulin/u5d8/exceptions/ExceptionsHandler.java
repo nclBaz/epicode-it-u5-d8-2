@@ -12,10 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionsHandler {
-//	@ExceptionHandler(BadRequestException.class)
-//	public String handleBadRequest() {
-//		
-//	}
+
+	@ExceptionHandler(BadRequestException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorsPayload handleBadRequest(BadRequestException e) {
+		return new ErrorsPayload(e.getMessage(), new Date(), 13212);
+	}
 
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)

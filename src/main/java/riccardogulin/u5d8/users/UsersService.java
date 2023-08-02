@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import riccardogulin.u5d8.exceptions.BadRequestException;
 import riccardogulin.u5d8.exceptions.NotFoundException;
 
 @Service
@@ -18,7 +19,10 @@ public class UsersService {
 	}
 
 	public User create(UserRequestPayload body) {
-		// TODO: check if email already in use
+		// check if email already in use
+		usersRepo.findByEmail(body.getEmail()).ifPresent(user -> {
+			throw new BadRequestException("L'email è già stata utilizzata");
+		});
 		User newUser = new User(body.getName(), body.getSurname(), body.getEmail());
 		return usersRepo.save(newUser);
 	}
